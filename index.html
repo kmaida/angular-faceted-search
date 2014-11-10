@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>ng-faceted-search</title>
+
+	<style>
+		<!--
+			p {
+				margin: 0;
+				padding: 0;
+			}
+			.left {
+				display:      inline;
+				float:        left;
+				margin-left:  10px;
+				margin-right: 10px;
+				width:        20%;
+			}
+			.right{
+				display:      inline;
+				float:        left;
+				margin-left:  10px;
+				margin-right: 10px;
+				width:        60%;
+			}
+			.top {
+				border-bottom: thin solid rgb(218, 218, 218);
+				padding-bottom: 10px;
+			}
+			.left {
+				margin:5px;
+			}
+			.filter {
+				margin:10px;
+				border-bottom: thin solid rgb(218, 218, 218);
+			}
+			.clearFacet {
+				cursor: pointer;
+				padding-right: 10px;
+			}
+			.clearFacet:before {
+				content: '(x) ';
+			}
+
+			[ng\:cloak],
+			[ng-cloak],
+			[data-ng-cloak],
+			[x-ng-cloak],
+			.ng-cloak,
+			.x-ng-cloak {
+			    display: none !important;
+			}
+		-->
+	</style>
+
+</head>
+<body ng-cloak>
+
+	<div ng-controller="MainCtrl">
+
+		<div class="top">
+			Search: <input name="company" type="text" class="search-input" ng-model="query"/>
+		</div>
+
+		<section class="left">
+			<div class="filter">
+				Type
+				<div>
+					<div ng-repeat="typeFacet in typeFacets | orderBy:orderByValue">
+						<b><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet}}</b>
+						<!-- TODO: hide the span if something in this repeat has already been selected! -->
+						<span>({{ (filteredItems | filter:query | filter:count('type', typeFacet)).length }})</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="filter">
+				Color
+				<div>
+					<div ng-repeat="colorFacet in colorFacets | orderBy:orderByValue">
+						<b><input type="checkbox" ng-model="useFacets['color'][colorFacet]"/>{{colorFacet}}</b>
+						<!-- TODO: hide the span if something in this repeat has already been selected! -->
+						<span>({{ (filteredItems | filter:query | filter:count('color', colorFacet)).length }})</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="filter">
+				No. of Studs
+				<div>
+					<div ng-repeat="studsFacet in studsFacets | orderBy:orderByValue">
+						<b><input type="checkbox" ng-model="useFacets['studs'][studsFacet]"/>{{studsFacet}}</b>
+						<!-- TODO: hide the span if something in this repeat has already been selected! -->
+						<span>({{ (filteredItems | filter:query | filter:count('studs', studsFacet)).length }})</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="right">
+			<div>
+				<h2>{{(filteredItems | filter:query).length}} {{(filteredItems | filter:query).length === 1 ? 'Item' : 'Items'}}</h2>
+
+				<p class="wrapper-facets">
+					<a ng-if="activeFacets.length" class="clearFacet" ng-click="clearAllFacets()">Clear All</a>
+
+					<a class="clearFacet" ng-repeat="facet in activeFacets" ng-click="clearFacet(facet)">{{facet}}</a>
+				</p>
+
+				<ul>
+					<li ng-repeat="item in filteredItems | filter:query" >
+						<p><b>{{item.name}}</b></p>
+						<p>Type: {{item.type}}<br/>
+							Color: {{item.color}}<br/>
+							Studs: {{item.studs}}</p>
+					</li>
+				</ul>
+				<p ng-if="!(filteredItems | filter:query).length">Sorry, no results found!</p>
+			</div>
+		</section>
+
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
