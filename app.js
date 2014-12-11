@@ -143,13 +143,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		// http://stackoverflow.com/a/18261306
 		$scope.orderByValue = function(value) {
 			return value;
-		}
+		};
 
 		// Reset all previously-selected facets.
 		$scope.clearAllFacets = function() {
 			$scope.activeFacets = [];
 			$scope.useFacets = {};
-		}
+		};
 
 		// Clear the clicked facet.
 		$scope.clearFacet = function(facet) {
@@ -168,7 +168,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 					}
 				}
 			}
-		}
+		};
 
 	// Filter items
 		var filterItems = function(filterAfterArray, facetName, newArray) {
