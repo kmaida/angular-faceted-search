@@ -132,7 +132,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			};
 		};
 
-	// Facets
+	// Facets: collects all values for each facet from items dataset
+	// Alternatively, could pre-define the facets we want to use
 		$scope.typeFacets = Helpers.uniq($scope.items, 'type');
 		$scope.colorFacets = Helpers.uniq($scope.items, 'color');
 		$scope.studsFacets = Helpers.uniq($scope.items, 'studs');
