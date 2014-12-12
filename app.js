@@ -152,6 +152,11 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			$scope.useFacets = {};
 		};
 
+		// Clear search query.
+		$scope.clearQuery = function() {
+			$scope.query = null;
+		};
+
 		// Clear the clicked facet.
 		$scope.clearFacet = function(facet) {
 			// Find the index of the facet so we can remove it from the active facets.

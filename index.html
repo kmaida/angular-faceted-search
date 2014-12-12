@@ -60,7 +60,9 @@
 	<div ng-controller="MainCtrl">
 
 		<div class="top">
-			Search: <input name="company" type="text" class="search-input" ng-model="query"/>
+			Search: <input name="company" type="text" class="search-input" ng-model="query"/> <a ng-if="query"
+																								 class="clearFacet"
+			ng-click="clearQuery()">{{query}}</a>
 		</div>
 
 		<section class="left">
