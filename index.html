@@ -29,7 +29,11 @@
 				padding-bottom: 10px;
 			}
 			.left {
-				margin:5px;
+				margin: 5px;
+			}
+			label {
+				cursor: pointer;
+				font-weight: bold;
 			}
 			.filter {
 				margin:10px;
@@ -70,8 +74,8 @@
 				Type
 				<div>
 					<div ng-repeat="typeFacet in typeFacets | orderBy:orderByValue">
-						<b><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet
-							}}</b>
+						<label><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet
+							}}</label>
 						<!--<span>({{ (filteredItems | filter:query |-->
 							<!--filter:count('type',-->
 							<!--typeFacet)).length }})</span>-->
@@ -83,7 +87,7 @@
 				Color
 				<div>
 					<div ng-repeat="colorFacet in colorFacets | orderBy:orderByValue">
-						<b><input type="checkbox" ng-model="useFacets['color'][colorFacet]"/>{{colorFacet}}</b>
+						<label><input type="checkbox" ng-model="useFacets['color'][colorFacet]"/>{{colorFacet}}</label>
 						<!--<span>({{ (filteredItems | filter:query | filter:count('color', colorFacet)).length }})</span>-->
 					</div>
 				</div>
@@ -93,7 +97,7 @@
 				No. of Studs
 				<div>
 					<div ng-repeat="studsFacet in studsFacets | orderBy:orderByValue">
-						<b><input type="checkbox" ng-model="useFacets['studs'][studsFacet]"/>{{studsFacet}}</b>
+						<label><input type="checkbox" ng-model="useFacets['studs'][studsFacet]"/>{{studsFacet}}</label>
 						<!--<span>({{ (filteredItems | filter:query | filter:count('studs', studsFacet)).length }})</span>-->
 					</div>
 				</div>
