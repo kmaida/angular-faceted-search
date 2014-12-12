@@ -68,9 +68,11 @@
 				Type
 				<div>
 					<div ng-repeat="typeFacet in typeFacets | orderBy:orderByValue">
-						<b><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet}}</b>
-						<!-- TODO: hide the span if something in this repeat has already been selected! -->
-						<span>({{ (filteredItems | filter:query | filter:count('type', typeFacet)).length }})</span>
+						<b><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet
+							}}</b>
+						<!--<span>({{ (filteredItems | filter:query |-->
+							<!--filter:count('type',-->
+							<!--typeFacet)).length }})</span>-->
 					</div>
 				</div>
 			</div>
@@ -80,8 +82,7 @@
 				<div>
 					<div ng-repeat="colorFacet in colorFacets | orderBy:orderByValue">
 						<b><input type="checkbox" ng-model="useFacets['color'][colorFacet]"/>{{colorFacet}}</b>
-						<!-- TODO: hide the span if something in this repeat has already been selected! -->
-						<span>({{ (filteredItems | filter:query | filter:count('color', colorFacet)).length }})</span>
+						<!--<span>({{ (filteredItems | filter:query | filter:count('color', colorFacet)).length }})</span>-->
 					</div>
 				</div>
 			</div>
@@ -91,8 +92,7 @@
 				<div>
 					<div ng-repeat="studsFacet in studsFacets | orderBy:orderByValue">
 						<b><input type="checkbox" ng-model="useFacets['studs'][studsFacet]"/>{{studsFacet}}</b>
-						<!-- TODO: hide the span if something in this repeat has already been selected! -->
-						<span>({{ (filteredItems | filter:query | filter:count('studs', studsFacet)).length }})</span>
+						<!--<span>({{ (filteredItems | filter:query | filter:count('studs', studsFacet)).length }})</span>-->
 					</div>
 				</div>
 			</div>
@@ -100,7 +100,8 @@
 
 		<section class="right">
 			<div>
-				<h2>{{(filteredItems | filter:query).length}} {{(filteredItems | filter:query).length === 1 ? 'Item' : 'Items'}}</h2>
+				<h2>{{(filteredItems | filter:query).length}} Item{{(filteredItems | filter:query).length !== 1 ?
+					's' : null}}</h2>
 
 				<p class="wrapper-facets">
 					<a ng-if="activeFacets.length" class="clearFacet" ng-click="clearAllFacets()">Clear All</a>
