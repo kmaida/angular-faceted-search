@@ -178,7 +178,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 		// Clear any active facets when a search query is entered
 		$scope.$watch('query', function (newValue, oldValue) {
-			if ((newValue !== oldValue) && $scope.activeFacets.length) {
+			if (newValue && (newValue !== oldValue) && (!!oldValue === false) && $scope.activeFacets.length) {
 				$scope.clearAllFacets();
 			}
 		});
