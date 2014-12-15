@@ -176,8 +176,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		};
 
-		// Clear any active facets when a search query is entered
-		// && (!!oldValue === false) to allow search query to be changed and preserve facets
+	// Clear any active facets when a search query is entered
+	// Add && (!!oldValue === false) to if statement to allow search query to be changed and preserve facets
 		$scope.$watch('query', function (newValue, oldValue) {
 			if (newValue && (newValue !== oldValue) && $scope.activeFacets.length) {
 				$scope.clearAllFacets();
