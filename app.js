@@ -133,7 +133,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		};
 
 	// Facets: collects all values for each facet from items dataset
-	// Alternatively, could pre-define the facets we want to use
+	// Alternately, we could pre-define the facets we want to use
 		$scope.typeFacets = Helpers.uniq($scope.items, 'type');
 		$scope.colorFacets = Helpers.uniq($scope.items, 'color');
 		$scope.studsFacets = Helpers.uniq($scope.items, 'studs');
@@ -176,7 +176,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		};
 
-	// Clear any active facets when a search query is entered
+	// Clear any active facets when a search query is entered.
 	// Add && (!!oldValue === false) to if statement to allow search query to be changed and preserve facets
 		$scope.$watch('query', function (newValue, oldValue) {
 			if (newValue && (newValue !== oldValue) && $scope.activeFacets.length) {
@@ -184,16 +184,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		});
 
-
-
-
-	// PROTOTYPE
+	// Facet results prototype.
 		function FacetResults(facetName) {
 			this.facetName = facetName;
 		}
 
 		FacetResults.prototype.filterItems = function(filterAfterArray) {
-			$scope['filterAfter' + this.facetName] = [];
+			$scope['filterAfter_' + this.facetName] = [];
 			selected = false;
 
 			// Iterate over previously filtered items.
@@ -214,8 +211,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 						// Push item from previous filter to new array
 						// if matches new facet and does not already exist.
 						// Using == instead of === enables matching integers to strings
-						if (itemObj[this.facetName] == facet && !Helpers.contains($scope['filterAfter' + this.facetName], itemObj)) {
-							$scope['filterAfter' + this.facetName].push(itemObj);
+						if (itemObj[this.facetName] == facet && !Helpers.contains($scope['filterAfter_' + this.facetName], itemObj)) {
+							$scope['filterAfter_' + this.facetName].push(itemObj);
 							break;
 						}
 					}
@@ -223,56 +220,22 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 
 			if (!selected) {
-				$scope['filterAfter' + this.facetName] = filterAfterArray;
+				$scope['filterAfter_' + this.facetName] = filterAfterArray;
 			}
-
-			console.log(this.facetName, $scope['filterAfter' + this.facetName]);
 		}
 
+		// New each set of facet results.
 		var FilterByType = new FacetResults('type'),
 			FilterByColor = new FacetResults('color'),
 			FilterByStuds = new FacetResults('studs');
 
+		// Filter each facet set.
 		FilterByType.filterItems($scope.items);
-		FilterByColor.filterItems($scope.filterAfterType);
-		FilterByStuds.filterItems($scope.filterAfterColor);
+		FilterByColor.filterItems($scope.filterAfter_type);
+		FilterByStuds.filterItems($scope.filterAfter_color);
 
-
-	/* Filter by Type facets
-		var filterAfterType = [];
-		selected = false;
-
-		filterItems($scope.items, 'type', filterAfterType);
-
-		if (!selected) {
-			filterAfterType = $scope.items;
-		}
-
-	// Filter by Color facets
-		var filterAfterColor = [];
-		selected = false;
-
-		filterItems(filterAfterType, 'color', filterAfterColor);
-
-		if (!selected) {
-			filterAfterColor = filterAfterType;
-		}
-
-	// Filter by Studs facets
-		var filterAfterStuds = [];
-		selected = false;
-
-		filterItems(filterAfterColor, 'studs', filterAfterStuds);
-
-		if (!selected) {
-			filterAfterStuds = filterAfterColor;
-		} */
-
-	// Filtered list of items
-		$scope.filteredItems = $scope.filterAfterStuds;
-
-		// this is returning undefined
-		console.log($scope.filteredItems);
+	// Return the final filtered list of items.
+		$scope.filteredItems = $scope.filterAfter_studs;
 
 	}, true);
 
