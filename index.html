@@ -81,11 +81,8 @@
 				Type
 				<div>
 					<div ng-repeat="typeFacet in typeFacets | orderBy:orderByValue">
-						<label><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet
-							}}</label>
-						<!--<span>({{ (filteredItems | filter:query |-->
-							<!--filter:count('type',-->
-							<!--typeFacet)).length }})</span>-->
+						<label><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet}}</label>
+						<!--<span>({{ (filteredItems | filter:query | filter:count('type', typeFacet)).length }})</span>-->
 					</div>
 				</div>
 			</div>
@@ -113,8 +110,7 @@
 
 		<section class="right">
 			<div>
-				<h2>{{(filteredItems | filter:query).length}} Item{{(filteredItems | filter:query).length !== 1 ?
-					's' : null}}</h2>
+				<h2>{{(filteredItems | filter:query).length}} Item{{(filteredItems | filter:query).length !== 1 ? 's' : null}}</h2>
 
 				<p class="wrapper-facets">
 					<a ng-if="activeFacets.length" class="clearFacet" ng-click="clearAllFacets()">Clear All</a>
@@ -123,7 +119,7 @@
 				</p>
 
 				<ul>
-					<li ng-repeat="item in filteredItems | filter:query" >
+					<li ng-repeat="item in filteredItems | filter:query">
 						<p><b>{{item.name}}</b></p>
 						<p>Type: {{item.type}}<br/>
 							Color: {{item.color}}<br/>

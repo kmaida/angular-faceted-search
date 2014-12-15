@@ -134,9 +134,20 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 	// Facets: collects all values for each facet from items dataset
 	// Alternately, we could pre-define the facets we want to use
-		$scope.typeFacets = Helpers.uniq($scope.items, 'type');
-		$scope.colorFacets = Helpers.uniq($scope.items, 'color');
-		$scope.studsFacets = Helpers.uniq($scope.items, 'studs');
+		var facetGroupNames = ['type', 'color', 'studs'];
+
+		$scope.facetGroups = [];
+
+		for (var i = 0; i < facetGroupNames.length; i++) {
+			var facetGroupObj = {
+					name: facetGroupNames[i],
+					facets: Helpers.uniq($scope.items, facetGroupNames[i])
+				};
+
+			$scope.facetGroups.push(facetGroupObj);
+		}
+
+		console.log($scope.facetGroups);
 
 		$scope.activeFacets = [];
 
@@ -176,10 +187,10 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		};
 
-	// Clear any active facets when a search query is entered.
-	// Add && (!!oldValue === false) to if statement to allow search query to be changed and preserve facets
+	// Clear any active facets when a search query is entered (or cleared).
+	// Add newValue && (!!oldValue === false) to if statement to allow search query to be changed and preserve facets.
 		$scope.$watch('query', function (newValue, oldValue) {
-			if (newValue && (newValue !== oldValue) && $scope.activeFacets.length) {
+			if ((newValue !== oldValue) && $scope.activeFacets.length) {
 				$scope.clearAllFacets();
 			}
 		});
