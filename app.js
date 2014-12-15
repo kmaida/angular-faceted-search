@@ -132,12 +132,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			};
 		};
 
-	// Facets: collects all values for each facet from items dataset
-	// Alternately, we could pre-define the facets we want to use
+	// Facets
+		// Define the facet group names.
 		var facetGroupNames = ['type', 'color', 'studs'];
-
 		$scope.facetGroups = [];
 
+		// Collect all options for each facet group from items dataset.
+		// (Alternately, we could pre-define the facets we want to use)
 		for (var i = 0; i < facetGroupNames.length; i++) {
 			var facetGroupObj = {
 					name: facetGroupNames[i],
@@ -147,11 +148,9 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			$scope.facetGroups.push(facetGroupObj);
 		}
 
-		console.log($scope.facetGroups);
-
 		$scope.activeFacets = [];
 
-		// Sort the available facets.
+		// Sort the available facets alphabetically/numerically.
 		// http://stackoverflow.com/a/18261306
 		$scope.orderByValue = function(value) {
 			return value;
@@ -168,7 +167,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			$scope.query = null;
 		};
 
-		// Clear the clicked facet.
+		// Clear a specific facet.
 		$scope.clearFacet = function(facet) {
 			// Find the index of the facet so we can remove it from the active facets.
 			var i = $scope.activeFacets.indexOf(facet);
@@ -177,8 +176,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			if (i != -1) {
 				$scope.activeFacets.splice(i, 1);
 
-				// Find the corresponding facet in the 
-				// filter models and turn it off.
+				// Find the corresponding facet in the filter models and turn it off.
 				for (var k in $scope.useFacets) {
 					if ($scope.useFacets[k]) {
 						$scope.useFacets[k][facet] = false;
@@ -195,7 +193,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		});
 
-	// Facet results prototype.
+	// Facet Results prototype.
 		function FacetResults(facetName) {
 			this.facetName = facetName;
 		}

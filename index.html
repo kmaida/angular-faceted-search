@@ -33,11 +33,14 @@
 			}
 			label {
 				cursor: pointer;
-				font-weight: bold;
 			}
 			.filter {
 				margin:10px;
 				border-bottom: thin solid rgb(218, 218, 218);
+			}
+			.filter h4 {
+				margin-bottom: 5px;
+				text-transform: capitalize;
 			}
 			.clearFacet {
 				cursor: pointer;
@@ -77,35 +80,15 @@
 		</div>
 
 		<section class="left">
-			<div class="filter">
-				Type
+			<div ng-repeat="group in facetGroups" class="filter">
+				<h4>{{group.name}}</h4>
 				<div>
-					<div ng-repeat="typeFacet in typeFacets | orderBy:orderByValue">
-						<label><input type="checkbox" ng-model="useFacets['type'][typeFacet]"/>{{typeFacet}}</label>
-						<!--<span>({{ (filteredItems | filter:query | filter:count('type', typeFacet)).length }})</span>-->
+					<div ng-repeat="facet in group.facets | orderBy:orderByValue">
+						<label><input type="checkbox" ng-model="useFacets[group.name][facet]"/>{{facet}}</label>
+						<!--<span>({{ (filteredItems | filter:query | filter:count(group.name, facet)).length }})</span>-->
 					</div>
 				</div>
-			</div>
-
-			<div class="filter">
-				Color
-				<div>
-					<div ng-repeat="colorFacet in colorFacets | orderBy:orderByValue">
-						<label><input type="checkbox" ng-model="useFacets['color'][colorFacet]"/>{{colorFacet}}</label>
-						<!--<span>({{ (filteredItems | filter:query | filter:count('color', colorFacet)).length }})</span>-->
-					</div>
-				</div>
-			</div>
-
-			<div class="filter">
-				No. of Studs
-				<div>
-					<div ng-repeat="studsFacet in studsFacets | orderBy:orderByValue">
-						<label><input type="checkbox" ng-model="useFacets['studs'][studsFacet]"/>{{studsFacet}}</label>
-						<!--<span>({{ (filteredItems | filter:query | filter:count('studs', studsFacet)).length }})</span>-->
-					</div>
-				</div>
-			</div>
+			</div>	
 		</section>
 
 		<section class="right">
