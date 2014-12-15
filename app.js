@@ -184,12 +184,22 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		});
 
-	// Filter items
-		var filterItems = function(filterAfterArray, facetName, newArray) {
+
+
+
+	// PROTOTYPE
+		function FacetResults(facetName) {
+			this.facetName = facetName;
+		}
+
+		FacetResults.prototype.filterItems = function(filterAfterArray) {
+			$scope['filterAfter' + this.facetName] = [];
+			selected = false;
+
 			// Iterate over previously filtered items.
 			for (var n in filterAfterArray) {
 				var itemObj = filterAfterArray[n],
-					useFacet = $scope.useFacets[facetName];
+					useFacet = $scope.useFacets[this.facetName];
 
 				// Iterate over new facet.
 				for (var facet in useFacet) {
@@ -204,16 +214,31 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 						// Push item from previous filter to new array
 						// if matches new facet and does not already exist.
 						// Using == instead of === enables matching integers to strings
-						if (itemObj[facetName] == facet && !Helpers.contains(newArray, itemObj)) {
-							newArray.push(itemObj);
+						if (itemObj[this.facetName] == facet && !Helpers.contains($scope['filterAfter' + this.facetName], itemObj)) {
+							$scope['filterAfter' + this.facetName].push(itemObj);
 							break;
 						}
 					}
 				}
 			}
-		};
 
-	// Filter by Type facets
+			if (!selected) {
+				$scope['filterAfter' + this.facetName] = filterAfterArray;
+			}
+
+			console.log(this.facetName, $scope['filterAfter' + this.facetName]);
+		}
+
+		var FilterByType = new FacetResults('type'),
+			FilterByColor = new FacetResults('color'),
+			FilterByStuds = new FacetResults('studs');
+
+		FilterByType.filterItems($scope.items);
+		FilterByColor.filterItems($scope.filterAfterType);
+		FilterByStuds.filterItems($scope.filterAfterColor);
+
+
+	/* Filter by Type facets
 		var filterAfterType = [];
 		selected = false;
 
@@ -241,10 +266,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 		if (!selected) {
 			filterAfterStuds = filterAfterColor;
-		}
+		} */
 
 	// Filtered list of items
-		$scope.filteredItems = filterAfterStuds;
+		$scope.filteredItems = $scope.filterAfterStuds;
+
+		// this is returning undefined
+		console.log($scope.filteredItems);
 
 	}, true);
 
