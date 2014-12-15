@@ -136,19 +136,20 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			};
 		};
 
-	/*
+	/*---
 		FACETS
 			- define facet group names
 			- fetch facets from data
 			- create active facets array
 			- facet manipulation functions
-	*/
+	---*/
 
 		// Define the facet group names.
 		var facetGroupNames = ['type', 'color', 'studs'];
 		$scope.facetGroups = [];
 
 		// Collect all options for each facet group from items dataset.
+		// The HTML template will iterate over the facetGroups array to generate filter options.
 		// (Alternately, we could pre-define the facets we want to use)
 		for (var i = 0; i < facetGroupNames.length; i++) {
 			var facetGroupObj = {
@@ -204,13 +205,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		});
 
-	/*
+	/*---
 		FILTERING BY FACET
 			- "constructor" object definition
 			- "new" each facet results set
 			- run filters
 			- return final list of items after last filter is run
-	*/
+	---*/
 
 		// FacetResults "constructor" object.
 		// http://davidwalsh.name/javascript-objects-deconstruction
@@ -255,7 +256,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 					$scope[newArray] = filterAfterArray;
 				}
 			}
-		}
+		};
 
 		// Create new object for each set of facet results (ie., like "new"ing).
 		for (var i = 0; i < facetGroupNames.length; i++) {
