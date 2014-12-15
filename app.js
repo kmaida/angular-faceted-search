@@ -1,6 +1,8 @@
-// http://jsfiddle.net/rzgWr/19/
+// Reference source - http://jsfiddle.net/rzgWr/19/
 
 var myApp = angular.module('myApp',[]);
+
+//---------------------------------------- HELPERS FACTORY
 
 myApp.factory('Helpers', function() {
 	return {
@@ -26,6 +28,8 @@ myApp.factory('Helpers', function() {
 		}
 	};
 });
+
+//---------------------------------------- CONTROLLER
 
 myApp.controller('MainCtrl', function($scope, Helpers) {
 	$scope.useFacets = {};
@@ -117,7 +121,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		}
 	];
 
-// Watch the facets that are selected.
+	// Watch the facets that are selected.
 	$scope.$watch(function () {
 		return {
 			items: $scope.items,
@@ -132,7 +136,14 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			};
 		};
 
-	// Facets
+	/*
+		FACETS
+			- define facet group names
+			- fetch facets from data
+			- create active facets array
+			- facet manipulation functions
+	*/
+
 		// Define the facet group names.
 		var facetGroupNames = ['type', 'color', 'studs'];
 		$scope.facetGroups = [];
@@ -185,72 +196,91 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 		};
 
-	// Clear any active facets when a search query is entered (or cleared).
-	// Add newValue && (!!oldValue === false) to if statement to allow search query to be changed and preserve facets.
+		// Clear any active facets when a search query is entered (or cleared).
+		// Add newValue && (!!oldValue === false) to if statement to allow search query to be changed and preserve facets.
 		$scope.$watch('query', function (newValue, oldValue) {
 			if ((newValue !== oldValue) && $scope.activeFacets.length) {
 				$scope.clearAllFacets();
 			}
 		});
 
-	// Facet Results prototype.
-		function FacetResults(facetName) {
-			this.facetName = facetName;
-		}
+	/*
+		FILTERING BY FACET
+			- "constructor" object definition
+			- "new" each facet results set
+			- run filters
+			- return final list of items after last filter is run
+	*/
 
-		FacetResults.prototype.filterItems = function(filterAfterArray) {
-			$scope['filterAfter_' + this.facetName] = [];
-			selected = false;
+		// FacetResults "constructor" object.
+		// http://davidwalsh.name/javascript-objects-deconstruction
+		var FacetResults = {
+			init: function(facetName) {
+				this.facetName = facetName;
+			},
+			filterItems: function(filterAfterArray) {
+				// Name the new array created after filter is run.
+				var newArray = 'filterAfter_' + this.facetName;
+				// Attach the new array to the $scope.
+				$scope[newArray] = [];
 
-			// Iterate over previously filtered items.
-			for (var n in filterAfterArray) {
-				var itemObj = filterAfterArray[n],
-					useFacet = $scope.useFacets[this.facetName];
+				selected = false;
 
-				// Iterate over new facet.
-				for (var facet in useFacet) {
-					if (useFacet[facet]) {
-						selected = true;
+				// Iterate over previously filtered items.
+				for (var n in filterAfterArray) {
+					var itemObj = filterAfterArray[n],
+						useFacet = $scope.useFacets[this.facetName];
 
-						// Push facet to list of active facets if doesn't already exist.
-						if (!Helpers.contains($scope.activeFacets, facet)) {
-							$scope.activeFacets.push(facet);
-						}
+					// Iterate over new facet.
+					for (var facet in useFacet) {
+						if (useFacet[facet]) {
+							selected = true;
 
-						// Push item from previous filter to new array
-						// if matches new facet and does not already exist.
-						// Using == instead of === enables matching integers to strings
-						if (itemObj[this.facetName] == facet && !Helpers.contains($scope['filterAfter_' + this.facetName], itemObj)) {
-							$scope['filterAfter_' + this.facetName].push(itemObj);
-							break;
+							// Push facet to list of active facets if doesn't already exist.
+							if (!Helpers.contains($scope.activeFacets, facet)) {
+								$scope.activeFacets.push(facet);
+							}
+
+							// Push item from previous filter to new array if matches new facet and unique.
+							// (Using == instead of === enables matching integers to strings)
+							if (itemObj[this.facetName] == facet && !Helpers.contains($scope[newArray], itemObj)) {
+								$scope[newArray].push(itemObj);
+								break;
+							}
 						}
 					}
 				}
-			}
 
-			if (!selected) {
-				$scope['filterAfter_' + this.facetName] = filterAfterArray;
+				if (!selected) {
+					$scope[newArray] = filterAfterArray;
+				}
 			}
 		}
 
-		// New each set of facet results.
-		var FilterByType = new FacetResults('type'),
-			FilterByColor = new FacetResults('color'),
-			FilterByStuds = new FacetResults('studs');
+		// Create new object for each set of facet results (ie., like "new"ing).
+		for (var i = 0; i < facetGroupNames.length; i++) {
+			var thisName = facetGroupNames[i];
+
+			$scope['FilterBy_' + thisName] = Object.create(FacetResults);
+			$scope['FilterBy_' + thisName].init(thisName);
+		}
 
 		// Filter each facet set.
-		FilterByType.filterItems($scope.items);
-		FilterByColor.filterItems($scope.filterAfter_type);
-		FilterByStuds.filterItems($scope.filterAfter_color);
+		$scope.FilterBy_type.filterItems($scope.items);
+		$scope.FilterBy_color.filterItems($scope.filterAfter_type);
+		$scope.FilterBy_studs.filterItems($scope.filterAfter_color);
 
-	// Return the final filtered list of items.
+		// Return the final filtered list of items.
 		$scope.filteredItems = $scope.filterAfter_studs;
 
 	}, true);
+
+	/* Uncomment and use this if needed
 
 	$scope.$watch('filteredItems', function (newValue) {
 		if (angular.isArray(newValue)) {
 			console.log('do something when filteredItems updated', newValue.length);
 		}
 	}, true);
+	*/
 });
