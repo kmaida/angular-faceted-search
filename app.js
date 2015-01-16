@@ -146,12 +146,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 		// Define the facet group names.
 		var facetGroupNames = ['type', 'color', 'studs'];
+		var facetGroupNamesLen = facetGroupNames.length;
 		$scope.facetGroups = [];
 
 		// Collect all options for each facet group from items dataset.
 		// The HTML template will iterate over the facetGroups array to generate filter options.
 		// (Alternately, we could pre-define the facets we want to use)
-		for (var i = 0; i < facetGroupNames.length; i++) {
+		for (var i = 0; i < facetGroupNamesLen; i++) {
 			var facetGroupObj = {
 					name: facetGroupNames[i],
 					facets: Helpers.uniq($scope.items, facetGroupNames[i])
@@ -216,12 +217,13 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		// FacetResults "constructor" object.
 		// http://davidwalsh.name/javascript-objects-deconstruction
 		var FacetResults = {
-			init: function(facetName) {
+			init: function(facetIndex, facetName) {
+				this.facetIndex = facetIndex;
 				this.facetName = facetName;
 			},
 			filterItems: function(filterAfterArray) {
 				// Name the new array created after filter is run.
-				var newArray = 'filterAfter_' + this.facetName;
+				var newArray = 'filterAfter_' + this.facetIndex;
 				// Attach the new array to the $scope.
 				$scope[newArray] = [];
 
@@ -259,20 +261,24 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		};
 
 		// Create new object for each set of facet results (ie., like "new"ing).
-		for (var i = 0; i < facetGroupNames.length; i++) {
+		for (var i = 0; i < facetGroupNamesLen; i++) {
 			var thisName = facetGroupNames[i];
 
-			$scope['FilterBy_' + thisName] = Object.create(FacetResults);
-			$scope['FilterBy_' + thisName].init(thisName);
+			$scope['FilterBy_' + i] = Object.create(FacetResults);
+			$scope['FilterBy_' + i].init(i, thisName);
 		}
 
-		// Filter each facet set.
-		$scope.FilterBy_type.filterItems($scope.items);
-		$scope.FilterBy_color.filterItems($scope.filterAfter_type);
-		$scope.FilterBy_studs.filterItems($scope.filterAfter_color);
+		for (var i = 0; i < facetGroupNamesLen; i++) {
+			// Filter each facet set.
+			if (i === 0) {
+				$scope.FilterBy_0.filterItems($scope.items);
+			} else {
+				$scope['FilterBy_' + i].filterItems($scope['filterAfter_' + (i - 1)]);
+			}
+		}
 
 		// Return the final filtered list of items.
-		$scope.filteredItems = $scope.filterAfter_studs;
+		$scope.filteredItems = $scope['filterAfter_' + (facetGroupNamesLen - 1)];
 
 	}, true);
 
