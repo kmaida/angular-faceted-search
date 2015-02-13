@@ -260,6 +260,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		}
 	}, function (value) {
 		var selected;
+		var filterBy = [];
+		var filterAfter = [];
 
 		$scope.activeFacets = [];
 
@@ -267,16 +269,16 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		for (var i = 0; i < facetGroupNamesLen; i++) {
 			var thisName = facetGroupNames[i];
 
-			$scope['FilterBy_' + i] = Object.create(FacetResults);
-			$scope['FilterBy_' + i].init(i, thisName);
+			filterBy.push(Object.create(FacetResults));
+			filterBy[i].init(i, thisName);
 		}
 
 		for (var i = 0; i < facetGroupNamesLen; i++) {
 			// Filter each facet set.
 			if (i === 0) {
-				$scope.FilterBy_0.filterItems($scope.items);
+				filterBy[0].filterItems($scope.items);
 			} else {
-				$scope['FilterBy_' + i].filterItems($scope['filterAfter_' + (i - 1)]);
+				filterBy[i].filterItems($scope['filterAfter_' + (i - 1)]);
 			}
 		}
 
