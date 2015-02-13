@@ -176,6 +176,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		}
 	});
 	
+	var filterAfters = [];
+
 	// FacetResults "constructor" object.
 	// http://davidwalsh.name/javascript-objects-deconstruction
 	var FacetResults = {
@@ -185,9 +187,9 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		},
 		filterItems: function(filterAfterArray) {
 			// Name the new array created after filter is run.
-			var newArray = 'filterAfter_' + this.facetIndex;
+			var newArray = this.facetIndex;
 			// Attach the new array to the $scope.
-			$scope[newArray] = [];
+			filterAfters[newArray] = [];
 
 			selected = false;
 
@@ -208,8 +210,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 						// Push item from previous filter to new array if matches new facet and unique.
 						// (Using == instead of === enables matching integers to strings)
-						if (itemObj[this.facetName] == facet && !Helpers.contains($scope[newArray], itemObj)) {
-							$scope[newArray].push(itemObj);
+						if (itemObj[this.facetName] == facet && !Helpers.contains(filterAfters[newArray], itemObj)) {
+							filterAfters[newArray].push(itemObj);
 							break;
 						}
 					}
@@ -217,7 +219,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 
 			if (!selected) {
-				$scope[newArray] = filterAfterArray;
+				filterAfters[newArray] = filterAfterArray;
 			}
 		}
 	};
@@ -278,12 +280,12 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			if (i === 0) {
 				filterBy[0].filterItems($scope.items);
 			} else {
-				filterBy[i].filterItems($scope['filterAfter_' + (i - 1)]);
+				filterBy[i].filterItems(filterAfters[i - 1]);
 			}
 		}
 
 		// Return the final filtered list of items.
-		$scope.filteredItems = $scope['filterAfter_' + (facetGroupNamesLen - 1)];
+		$scope.filteredItems = filterAfters[facetGroupNamesLen - 1];
 
 	}, true);
 
