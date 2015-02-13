@@ -261,9 +261,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			useFacets: $scope.useFacets
 		}
 	}, function (value) {
-		var selected;
-		var filterBy = [];
-		var filterAfter = [];
+		var selected,
+			filterBy = [];
 
 		$scope.activeFacets = [];
 
