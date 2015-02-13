@@ -187,9 +187,9 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		},
 		filterItems: function(filterAfterArray) {
 			// Name the new array created after filter is run.
-			var newArray = this.facetIndex;
-			// Attach the new array to the $scope.
-			filterAfters[newArray] = [];
+			var newArrayIndex = this.facetIndex;
+			// Add the new array to the filterAfters array
+			filterAfters[newArrayIndex] = [];
 
 			selected = false;
 
@@ -210,8 +210,8 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 						// Push item from previous filter to new array if matches new facet and unique.
 						// (Using == instead of === enables matching integers to strings)
-						if (itemObj[this.facetName] == facet && !Helpers.contains(filterAfters[newArray], itemObj)) {
-							filterAfters[newArray].push(itemObj);
+						if (itemObj[this.facetName] == facet && !Helpers.contains(filterAfters[newArrayIndex], itemObj)) {
+							filterAfters[newArrayIndex].push(itemObj);
 							break;
 						}
 					}
@@ -219,7 +219,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			}
 
 			if (!selected) {
-				filterAfters[newArray] = filterAfterArray;
+				filterAfters[newArrayIndex] = filterAfterArray;
 			}
 		}
 	};
@@ -261,8 +261,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			useFacets: $scope.useFacets
 		}
 	}, function (value) {
-		var selected,
-			filterBy = [];
+		var filterBy = [];
 
 		$scope.activeFacets = [];
 
