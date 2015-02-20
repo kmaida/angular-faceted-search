@@ -228,6 +228,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		SET UP FACETS
 			- define facet group names
 			- compile all facets that belong in each group
+			- create new objects for each set of facet results
 	---*/
 	
 	// Define the facet group names.
@@ -248,12 +249,24 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		$scope.facetGroups.push(facetGroupObj);
 	}
 
+	// Create new object for each set of facet results (ie., like "new"ing).
+	var filterBy = [];
+
+	for (var i = 0; i < facetGroupNamesLen; i++) {
+		var thisName = facetGroupNames[i];
+
+		filterBy.push(Object.create(FacetResults));
+		filterBy[i].init(i, thisName);
+	}
+
 	/*---
 		WATCH FACET SELECTION
 			- "new" each facet results set
 			- run filters
 			- return final list of items after last filter is run
 	---*/
+
+	$scope.activeFacets = [];
 	
 	$scope.$watch(function () {
 		return {
@@ -261,20 +274,9 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			useFacets: $scope.useFacets
 		}
 	}, function (value) {
-		var filterBy = [];
 
-		$scope.activeFacets = [];
-
-		// Create new object for each set of facet results (ie., like "new"ing).
+		// Filter each facet set.
 		for (var i = 0; i < facetGroupNamesLen; i++) {
-			var thisName = facetGroupNames[i];
-
-			filterBy.push(Object.create(FacetResults));
-			filterBy[i].init(i, thisName);
-		}
-
-		for (var i = 0; i < facetGroupNamesLen; i++) {
-			// Filter each facet set.
 			if (i === 0) {
 				filterBy[0].filterItems($scope.items);
 			} else {
