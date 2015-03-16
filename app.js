@@ -1,3 +1,5 @@
+'use strict';
+
 // Reference source - http://jsfiddle.net/rzgWr/19/
 
 var myApp = angular.module('myApp',[]);
@@ -191,7 +193,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 			// Add the new array to the filterAfters array
 			filterAfters[newArrayIndex] = [];
 
-			selected = false;
+			var selected = false;
 
 			// Iterate over previously filtered items.
 			for (var n in filterAfterArray) {
@@ -213,6 +215,15 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 						if (itemObj[this.facetName] == facet && !Helpers.contains(filterAfters[newArrayIndex], itemObj)) {
 							filterAfters[newArrayIndex].push(itemObj);
 							break;
+						}
+					} else {
+						selected = false;
+
+						// Remove facet from list of active facets if toggled off.
+						var facetIndex = $scope.activeFacets.indexOf(facet);
+
+						if (facetIndex > -1) {
+							$scope.activeFacets.splice(facetIndex, 1);
 						}
 					}
 				}
@@ -268,13 +279,7 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 
 	$scope.activeFacets = [];
 	
-	$scope.$watch(function () {
-		return {
-			items: $scope.items,
-			useFacets: $scope.useFacets
-		}
-	}, function (value) {
-
+	$scope.$watch('useFacets', function(newVal, oldVal) {
 		// Filter each facet set.
 		for (var i = 0; i < facetGroupNamesLen; i++) {
 			if (i === 0) {
@@ -288,13 +293,4 @@ myApp.controller('MainCtrl', function($scope, Helpers) {
 		$scope.filteredItems = filterAfters[facetGroupNamesLen - 1];
 
 	}, true);
-
-	/* Uncomment and use this if needed
-
-	$scope.$watch('filteredItems', function (newValue) {
-		if (angular.isArray(newValue)) {
-			console.log('do something when filteredItems updated', newValue.length);
-		}
-	}, true);
-	*/
 });
