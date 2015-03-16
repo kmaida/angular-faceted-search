@@ -3,7 +3,7 @@ angular-faceted-search
 
 An implementation of faceted search of a JSON dataset with AngularJS.
 
-AngularJS v1.2.27 (latest stable release at the time of writing)
+AngularJS v1.3.14
 
 References:
 
